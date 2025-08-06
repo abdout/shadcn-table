@@ -10,21 +10,34 @@ import {
   Timer,
 } from "lucide-react";
 import { customAlphabet } from "nanoid";
-import { type Task, tasks } from "@/db/schema";
+import type { Task, TaskStatus, TaskLabel, TaskPriority } from "@prisma/client";
 
 import { generateId } from "@/lib/id";
 
-export function generateRandomTask(): Task {
+export function generateRandomTask(): Omit<Task, "id"> {
+  const statusValues: TaskStatus[] = [
+    "todo",
+    "in_progress",
+    "done",
+    "canceled",
+  ];
+  const labelValues: TaskLabel[] = [
+    "bug",
+    "feature",
+    "enhancement",
+    "documentation",
+  ];
+  const priorityValues: TaskPriority[] = ["low", "medium", "high"];
+
   return {
-    id: generateId("task"),
     code: `TASK-${customAlphabet("0123456789", 4)()}`,
     title: faker.hacker
       .phrase()
       .replace(/^./, (letter) => letter.toUpperCase()),
     estimatedHours: faker.number.int({ min: 1, max: 24 }),
-    status: faker.helpers.shuffle(tasks.status.enumValues)[0] ?? "todo",
-    label: faker.helpers.shuffle(tasks.label.enumValues)[0] ?? "bug",
-    priority: faker.helpers.shuffle(tasks.priority.enumValues)[0] ?? "low",
+    status: faker.helpers.shuffle(statusValues)[0] ?? "todo",
+    label: faker.helpers.shuffle(labelValues)[0] ?? "bug",
+    priority: faker.helpers.shuffle(priorityValues)[0] ?? "low",
     archived: faker.datatype.boolean({ probability: 0.2 }),
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -35,7 +48,7 @@ export function getStatusIcon(status: Task["status"]) {
   const statusIcons = {
     canceled: CircleX,
     done: CheckCircle2,
-    "in-progress": Timer,
+    in_progress: Timer,
     todo: CircleHelp,
   };
 

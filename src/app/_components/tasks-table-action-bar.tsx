@@ -17,7 +17,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { type Task, tasks } from "@/db/schema";
+import type { Task } from "@prisma/client";
 import { exportTableToCSV } from "@/lib/export";
 import { deleteTasks, updateTasks } from "../_lib/actions";
 
@@ -120,7 +120,7 @@ export function TasksTableActionBar({ table }: TasksTableActionBarProps) {
           </SelectTrigger>
           <SelectContent align="center">
             <SelectGroup>
-              {tasks.status.enumValues.map((status) => (
+              {(["todo", "in_progress", "done", "canceled"] as const).map((status) => (
                 <SelectItem key={status} value={status} className="capitalize">
                   {status}
                 </SelectItem>
@@ -144,7 +144,7 @@ export function TasksTableActionBar({ table }: TasksTableActionBarProps) {
           </SelectTrigger>
           <SelectContent align="center">
             <SelectGroup>
-              {tasks.priority.enumValues.map((priority) => (
+              {(["low", "medium", "high"] as const).map((priority) => (
                 <SelectItem
                   key={priority}
                   value={priority}

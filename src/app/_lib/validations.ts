@@ -7,12 +7,12 @@ import {
 } from "nuqs/server";
 import * as z from "zod";
 import { flagConfig } from "@/config/flag";
-import { type Task, tasks } from "@/db/schema";
+import type { Task, TaskStatus, TaskLabel, TaskPriority } from "@prisma/client";
 import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
 export const searchParamsCache = createSearchParamsCache({
   filterFlag: parseAsStringEnum(
-    flagConfig.featureFlags.map((flag) => flag.value),
+    flagConfig.featureFlags.map((flag) => flag.value)
   ),
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(10),
@@ -20,8 +20,10 @@ export const searchParamsCache = createSearchParamsCache({
     { id: "createdAt", desc: true },
   ]),
   title: parseAsString.withDefault(""),
-  status: parseAsArrayOf(z.enum(tasks.status.enumValues)).withDefault([]),
-  priority: parseAsArrayOf(z.enum(tasks.priority.enumValues)).withDefault([]),
+  status: parseAsArrayOf(
+    z.enum(["todo", "in_progress", "done", "canceled"])
+  ).withDefault([]),
+  priority: parseAsArrayOf(z.enum(["low", "medium", "high"])).withDefault([]),
   estimatedHours: parseAsArrayOf(z.coerce.number()).withDefault([]),
   createdAt: parseAsArrayOf(z.coerce.number()).withDefault([]),
   // advanced filter
@@ -31,17 +33,17 @@ export const searchParamsCache = createSearchParamsCache({
 
 export const createTaskSchema = z.object({
   title: z.string(),
-  label: z.enum(tasks.label.enumValues),
-  status: z.enum(tasks.status.enumValues),
-  priority: z.enum(tasks.priority.enumValues),
+  label: z.enum(["bug", "feature", "enhancement", "documentation"]),
+  status: z.enum(["todo", "in_progress", "done", "canceled"]),
+  priority: z.enum(["low", "medium", "high"]),
   estimatedHours: z.coerce.number().optional(),
 });
 
 export const updateTaskSchema = z.object({
   title: z.string().optional(),
-  label: z.enum(tasks.label.enumValues).optional(),
-  status: z.enum(tasks.status.enumValues).optional(),
-  priority: z.enum(tasks.priority.enumValues).optional(),
+  label: z.enum(["bug", "feature", "enhancement", "documentation"]).optional(),
+  status: z.enum(["todo", "in_progress", "done", "canceled"]).optional(),
+  priority: z.enum(["low", "medium", "high"]).optional(),
   estimatedHours: z.coerce.number().optional(),
 });
 

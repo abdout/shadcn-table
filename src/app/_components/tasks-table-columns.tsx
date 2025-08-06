@@ -28,7 +28,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type Task, tasks } from "@/db/schema";
+import type { Task } from "@prisma/client";
 import { formatDate } from "@/lib/format";
 import { getErrorMessage } from "@/lib/handle-error";
 import type { DataTableRowAction } from "@/types/data-table";
@@ -94,7 +94,7 @@ export function getTasksTableColumns({
         <DataTableColumnHeader column={column} title="Title" />
       ),
       cell: ({ row }) => {
-        const label = tasks.label.enumValues.find(
+        const label = (["bug", "feature", "enhancement", "documentation"] as const).find(
           (label) => label === row.original.label,
         );
 
@@ -122,7 +122,7 @@ export function getTasksTableColumns({
         <DataTableColumnHeader column={column} title="Status" />
       ),
       cell: ({ cell }) => {
-        const status = tasks.status.enumValues.find(
+        const status = (["todo", "in_progress", "done", "canceled"] as const).find(
           (status) => status === cell.getValue<Task["status"]>(),
         );
 
@@ -140,7 +140,7 @@ export function getTasksTableColumns({
       meta: {
         label: "Status",
         variant: "multiSelect",
-        options: tasks.status.enumValues.map((status) => ({
+        options: (["todo", "in_progress", "done", "canceled"] as const).map((status) => ({
           label: status.charAt(0).toUpperCase() + status.slice(1),
           value: status,
           count: statusCounts[status],
@@ -157,7 +157,7 @@ export function getTasksTableColumns({
         <DataTableColumnHeader column={column} title="Priority" />
       ),
       cell: ({ cell }) => {
-        const priority = tasks.priority.enumValues.find(
+        const priority = (["low", "medium", "high"] as const).find(
           (priority) => priority === cell.getValue<Task["priority"]>(),
         );
 
@@ -175,7 +175,7 @@ export function getTasksTableColumns({
       meta: {
         label: "Priority",
         variant: "multiSelect",
-        options: tasks.priority.enumValues.map((priority) => ({
+        options: (["low", "medium", "high"] as const).map((priority) => ({
           label: priority.charAt(0).toUpperCase() + priority.slice(1),
           value: priority,
           count: priorityCounts[priority],
@@ -261,7 +261,7 @@ export function getTasksTableColumns({
                       });
                     }}
                   >
-                    {tasks.label.enumValues.map((label) => (
+                    {(["bug", "feature", "enhancement", "documentation"] as const).map((label) => (
                       <DropdownMenuRadioItem
                         key={label}
                         value={label}

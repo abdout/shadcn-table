@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import type { Task } from "@/db/schema";
+import type { Task } from "@prisma/client";
 
 import { updateTask } from "../_lib/actions";
 import { type UpdateTaskSchema, updateTaskSchema } from "../_lib/validations";
