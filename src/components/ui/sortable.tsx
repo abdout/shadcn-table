@@ -40,7 +40,7 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { useComposedRefs } from "@/lib/compose-refs";
+import { useComposedRefs } from "@/components/table/lib/compose-refs";
 import { cn } from "@/lib/utils";
 
 const orientationConfig = {
@@ -540,8 +540,8 @@ interface SortableOverlayProps
   extends Omit<React.ComponentPropsWithoutRef<typeof DragOverlay>, "children"> {
   container?: Element | DocumentFragment | null;
   children?:
-    | ((params: { value: UniqueIdentifier }) => React.ReactNode)
-    | React.ReactNode;
+  | ((params: { value: UniqueIdentifier }) => React.ReactNode)
+  | React.ReactNode;
 }
 
 function SortableOverlay(props: SortableOverlayProps) {

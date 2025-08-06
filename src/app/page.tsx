@@ -1,18 +1,18 @@
 import * as React from "react";
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
-import { Shell } from "@/components/shell";
-import { getValidFilters } from "@/lib/data-table";
-import type { SearchParams } from "@/types";
+import { DataTableSkeleton } from "@/components/table/data-table/data-table-skeleton";
+import { Shell } from "@/components/table/shell";
+import { getValidFilters } from "@/components/table/lib/data-table";
+import type { SearchParams } from "@/components/table/types";
 
-import { FeatureFlagsProvider } from "./_components/feature-flags-provider";
-import { TasksTable } from "./_components/tasks-table";
+import { FeatureFlagsProvider } from "../components/table/_components/feature-flags-provider";
+import { TasksTable } from "../components/table/_components/tasks-table";
 import {
   getEstimatedHoursRange,
   getTaskPriorityCounts,
   getTaskStatusCounts,
   getTasks,
-} from "./_lib/queries";
-import { searchParamsCache } from "./_lib/validations";
+} from "../components/table/_lib/queries";
+import { searchParamsCache } from "../components/table/_lib/validations";
 
 interface IndexPageProps {
   searchParams: Promise<SearchParams>;
